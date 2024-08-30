@@ -23,12 +23,13 @@
 #include "cmsis_os.h"
 #include "m_functinos.h"
 #include "App/task1/task1.h"
-
+#include "App/task2/task2.h"
 /* Global variables ----------------------------------------------------------*/
 
 
 UART_HandleTypeDef huart2;
 TaskHandle_t xHandle_task1 = NULL;
+TaskHandle_t xHandle_task2 = NULL;
 
 /* Private function prototypes -----------------------------------------------*/
 void SystemClock_Config(void);
@@ -62,6 +63,12 @@ int main(void)
   {
 	  Error_Handler();
   }
+
+  xReturned = xTaskCreate(vTask2, "Task 2", 128, ( void * )&huart2, 2,  &xHandle_task2);
+   if (xReturned == 0)
+   {
+ 	  Error_Handler();
+   }
 
 
   /* Start scheduler */

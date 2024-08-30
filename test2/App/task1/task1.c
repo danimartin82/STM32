@@ -1,5 +1,7 @@
+#include "FreeRTOS.h"
+#include "task.h"
+
 #include "stm32f0xx_hal.h"
-#include "cmsis_os.h"
 #include "m_functinos.h"
 
 
@@ -16,7 +18,7 @@ void vTask1( void * pvParameters )
 	for(;;)
 	{
 		vPrintString(huart, (unsigned char *)"I'm task 1\n\r");
-		osDelay(1000);
+		vTaskDelay(1000/ portTICK_PERIOD_MS); // Wait 1000 ms
 	}
 
 }
