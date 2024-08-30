@@ -56,7 +56,7 @@ int main(void)
 
   /* Create the thread(s) */
 
-  xReturned = xTaskCreate(vTaskCode, "default task", 128, ( void * ) 1, tskIDLE_PRIORITY,  &xHandle);
+  xReturned = xTaskCreate(vTaskCode, "default task", 128, ( void * ) "I'm task 1\n\r", tskIDLE_PRIORITY,  &xHandle);
   if (xReturned == 0)
   {
 	  Error_Handler();
@@ -118,14 +118,6 @@ void SystemClock_Config(void)
   */
 static void MX_USART2_UART_Init(void)
 {
-
-  /* USER CODE BEGIN USART2_Init 0 */
-
-  /* USER CODE END USART2_Init 0 */
-
-  /* USER CODE BEGIN USART2_Init 1 */
-
-  /* USER CODE END USART2_Init 1 */
   huart2.Instance = USART2;
   huart2.Init.BaudRate = 38400;
   huart2.Init.WordLength = UART_WORDLENGTH_8B;
@@ -140,9 +132,6 @@ static void MX_USART2_UART_Init(void)
   {
     Error_Handler();
   }
-  /* USER CODE BEGIN USART2_Init 2 */
-
-  /* USER CODE END USART2_Init 2 */
 
 }
 
@@ -153,37 +142,28 @@ static void MX_USART2_UART_Init(void)
   */
 static void MX_GPIO_Init(void)
 {
-/* USER CODE BEGIN MX_GPIO_Init_1 */
-/* USER CODE END MX_GPIO_Init_1 */
 
   /* GPIO Ports Clock Enable */
   __HAL_RCC_GPIOA_CLK_ENABLE();
 
-/* USER CODE BEGIN MX_GPIO_Init_2 */
-/* USER CODE END MX_GPIO_Init_2 */
-}
 
-/* USER CODE BEGIN 4 */
 
-/* USER CODE END 4 */
-
-/* USER CODE BEGIN Header_StartDefaultTask */
 /**
   * @brief  Function implementing the defaultTask thread.
   * @param  argument: Not used
   * @retval None
   */
-/* USER CODE END Header_StartDefaultTask */
+
 void vTaskCode( void * pvParameters )
 {
-  /* USER CODE BEGIN 5 */
-  /* Infinite loop */
+  unsigned char * pctaskname = (unsigned char*) pvParameters;
+
   for(;;)
   {
-	vPrintString(&huart2,"Hola\n\r");
+	vPrintString(&huart2, pctaskname);
     osDelay(1000);
   }
-  /* USER CODE END 5 */
+
 }
 
 /**
@@ -192,13 +172,10 @@ void vTaskCode( void * pvParameters )
   */
 void Error_Handler(void)
 {
-  /* USER CODE BEGIN Error_Handler_Debug */
-  /* User can add his own implementation to report the HAL error return state */
   __disable_irq();
   while (1)
   {
   }
-  /* USER CODE END Error_Handler_Debug */
 }
 
 #ifdef  USE_FULL_ASSERT

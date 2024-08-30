@@ -1,6 +1,6 @@
 ..\Core\Src\main.c:43:5:main	2
-..\Core\Src\main.c:85:6:SystemClock_Config	3
-..\Core\Src\main.c:121:13:MX_USART2_UART_Init	2
-..\Core\Src\main.c:156:13:MX_GPIO_Init	1
-..\Core\Src\main.c:179:6:vTaskCode	1
-..\Core\Src\main.c:195:6:Error_Handler	1
+..\Core\Src\main.c:83:6:SystemClock_Config	3
+..\Core\Src\main.c:119:13:MX_USART2_UART_Init	2
+..\Core\Src\main.c:154:13:MX_GPIO_Init	1
+..\Core\Src\main.c:177:6:vTaskCode	1
+..\Core\Src\main.c:193:6:Error_Handler	1
