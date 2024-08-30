@@ -18,21 +18,23 @@
 
 /* Includes ------------------------------------------------------------------*/
 #include <stdio.h>
+
 #include "main.h"
 #include "cmsis_os.h"
 #include "m_functinos.h"
+#include "App/task1/task1.h"
 
 /* Global variables ----------------------------------------------------------*/
 
 
 UART_HandleTypeDef huart2;
-TaskHandle_t xHandle = NULL;
+TaskHandle_t xHandle_task1 = NULL;
 
 /* Private function prototypes -----------------------------------------------*/
 void SystemClock_Config(void);
 static void MX_GPIO_Init(void);
 static void MX_USART2_UART_Init(void);
-void vTaskCode( void * pvParameters );
+
 
 
 
@@ -46,7 +48,6 @@ int main(void)
 
   /* MCU Configuration--------------------------------------------------------*/
 
-
   HAL_Init();
   SystemClock_Config();
 
@@ -56,7 +57,7 @@ int main(void)
 
   /* Create the thread(s) */
 
-  xReturned = xTaskCreate(vTaskCode, "default task", 128, ( void * ) "I'm task 1\n\r", tskIDLE_PRIORITY,  &xHandle);
+  xReturned = xTaskCreate(vTask1, "Task 1", 128, ( void * )&huart2, tskIDLE_PRIORITY,  &xHandle_task1);
   if (xReturned == 0)
   {
 	  Error_Handler();
@@ -67,8 +68,6 @@ int main(void)
   osKernelStart();
 
   /* We should never get here as control is now taken by the scheduler */
-
-
   while (1)
   {
 
@@ -145,26 +144,10 @@ static void MX_GPIO_Init(void)
 
   /* GPIO Ports Clock Enable */
   __HAL_RCC_GPIOA_CLK_ENABLE();
-
-
-
-/**
-  * @brief  Function implementing the defaultTask thread.
-  * @param  argument: Not used
-  * @retval None
-  */
-
-void vTaskCode( void * pvParameters )
-{
-  unsigned char * pctaskname = (unsigned char*) pvParameters;
-
-  for(;;)
-  {
-	vPrintString(&huart2, pctaskname);
-    osDelay(1000);
-  }
-
 }
+
+
+
 
 /**
   * @brief  This function is executed in case of error occurrence.
