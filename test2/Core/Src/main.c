@@ -19,15 +19,26 @@
 /* Includes ------------------------------------------------------------------*/
 #include <stdio.h>
 
+
+#include "FreeRTOS.h"
+#include "task.h"
+#include "timers.h"
+#include "queue.h"
+#include "semphr.h"
+#include "event_groups.h"
+
 #include "main.h"
-#include "cmsis_os.h"
 #include "m_functinos.h"
 #include "App/task1/task1.h"
 #include "App/task2/task2.h"
+
+#include "stm32f0xx_ll_tim.h"
+
 /* Global variables ----------------------------------------------------------*/
 
 
 UART_HandleTypeDef huart2;
+TIM_HandleTypeDef htim1;
 TaskHandle_t xHandle_task1 = NULL;
 TaskHandle_t xHandle_task2 = NULL;
 
@@ -72,7 +83,7 @@ int main(void)
 
 
   /* Start scheduler */
-  osKernelStart();
+   vTaskStartScheduler();
 
   /* We should never get here as control is now taken by the scheduler */
   while (1)
@@ -168,6 +179,56 @@ void Error_Handler(void)
   }
 }
 
+void vApplicationIdleHook(void)
+{
+
+}
+
+
+void configureRunTime(void)
+{
+	  TIM_ClockConfigTypeDef sClockSourceConfig = {0};
+	  TIM_SlaveConfigTypeDef sSlaveConfig = {0};
+	  TIM_MasterConfigTypeDef sMasterConfig = {0};
+
+
+	  htim1.Instance = TIM1;
+	  htim1.Init.Prescaler = 0;
+	  htim1.Init.CounterMode = TIM_COUNTERMODE_UP;
+	  htim1.Init.Period = 65535;
+	  htim1.Init.ClockDivision = TIM_CLOCKDIVISION_DIV1;
+	  htim1.Init.RepetitionCounter = 0;
+	  htim1.Init.AutoReloadPreload = TIM_AUTORELOAD_PRELOAD_DISABLE;
+	  if (HAL_TIM_Base_Init(&htim1) != HAL_OK)
+	  {
+	    Error_Handler();
+	  }
+	  sClockSourceConfig.ClockSource = TIM_CLOCKSOURCE_INTERNAL;
+	  if (HAL_TIM_ConfigClockSource(&htim1, &sClockSourceConfig) != HAL_OK)
+	  {
+	    Error_Handler();
+	  }
+	  sSlaveConfig.SlaveMode = TIM_SLAVEMODE_RESET;
+	  sSlaveConfig.InputTrigger = TIM_TS_ITR0;
+	  if (HAL_TIM_SlaveConfigSynchro(&htim1, &sSlaveConfig) != HAL_OK)
+	  {
+	    Error_Handler();
+	  }
+	  sMasterConfig.MasterOutputTrigger = TIM_TRGO_RESET;
+	  sMasterConfig.MasterSlaveMode = TIM_MASTERSLAVEMODE_DISABLE;
+	  if (HAL_TIMEx_MasterConfigSynchronization(&htim1, &sMasterConfig) != HAL_OK)
+	  {
+	    Error_Handler();
+	  }
+
+	  HAL_TIM_Base_Start(&htim1);
+
+}
+
+uint32_t getRunTimeCounter(void)
+{
+	return LL_TIM_GetCounter(htim1.Instance);
+}
 #ifdef  USE_FULL_ASSERT
 /**
   * @brief  Reports the name of the source file and the source line number

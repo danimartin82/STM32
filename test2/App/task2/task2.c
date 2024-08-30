@@ -14,18 +14,17 @@ void vTask2( void * pvParameters )
 {
 
 	UART_HandleTypeDef *huart =(UART_HandleTypeDef*)pvParameters;
-	TickType_t xLastWakeTime;
+//	TickType_t xLastWakeTime;
 
-	const TickType_t xFrequency = 2000; //ms if configTICK_RATE_HZ=1000
+	//const TickType_t xFrequency = 2000; //ms if configTICK_RATE_HZ=1000
 
-    // Initialise the xLastWakeTime variable with the current time.
-    xLastWakeTime = xTaskGetTickCount();
+    //xLastWakeTime = xTaskGetTickCount();
 
 	for(;;)
 	{
 		vPrintString(huart, (unsigned char *)"I'm task 2\n\r");
-		//vTaskDelay(2000/ portTICK_PERIOD_MS); // Wait 2000 ms
-		vTaskDelayUntil( &xLastWakeTime, xFrequency );
+		vTaskDelay(2000/ portTICK_PERIOD_MS); // Wait 2000 ms
+		//vTaskDelayUntil( &xLastWakeTime, xFrequency );
 	}
 
 }

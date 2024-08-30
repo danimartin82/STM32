@@ -689,10 +689,13 @@ extern "C" {
 #endif
 
 #ifndef configGENERATE_RUN_TIME_STATS
-	#define configGENERATE_RUN_TIME_STATS 0
+	#define configGENERATE_RUN_TIME_STATS 1
 #endif
 
 #if ( configGENERATE_RUN_TIME_STATS == 1 )
+
+#define portCONFIGURE_TIMER_FOR_RUN_TIME_STATS() configureRunTime()
+#define portGET_RUN_TIME_COUNTER_VALUE() getRunTimeCounter()
 
 	#ifndef portCONFIGURE_TIMER_FOR_RUN_TIME_STATS
 		#error If configGENERATE_RUN_TIME_STATS is defined then portCONFIGURE_TIMER_FOR_RUN_TIME_STATS must also be defined.  portCONFIGURE_TIMER_FOR_RUN_TIME_STATS should call a port layer function to setup a peripheral timer/counter that can then be used as the run time counter time base.
