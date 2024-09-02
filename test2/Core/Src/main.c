@@ -202,10 +202,11 @@ void Error_Handler(void)
   {
   }
 }
+static uint32_t  my_count = 0U;
 
 void vApplicationIdleHook(void)
 {
-
+	my_count++;
 }
 
 
