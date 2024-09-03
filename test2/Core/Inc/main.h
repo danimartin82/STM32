@@ -52,8 +52,8 @@ extern "C" {
 /* Exported functions prototypes ---------------------------------------------*/
 void Error_Handler(void);
 
-void configureRunTime(void);
-uint32_t getRunTimeCounter(void);
+//void configureRunTime(void);
+//uint32_t getRunTimeCounter(void);
 
 
 #ifdef __cplusplus
