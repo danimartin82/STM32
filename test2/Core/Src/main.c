@@ -31,7 +31,7 @@
 #include "m_functinos.h"
 #include "App/task1/task1.h"
 #include "App/task2/task2.h"
-
+#include "App/task3/task3.h"
 #include "stm32f0xx_ll_tim.h"
 
 /* Global variables ----------------------------------------------------------*/
@@ -41,6 +41,7 @@ UART_HandleTypeDef huart2;
 TIM_HandleTypeDef htim1;
 TaskHandle_t xHandle_task1 = NULL;
 TaskHandle_t xHandle_task2 = NULL;
+TaskHandle_t xHandle_task3 = NULL;
 
 /* Private function prototypes -----------------------------------------------*/
 void SystemClock_Config(void);
@@ -76,11 +77,16 @@ int main(void)
   }
 
   xReturned = xTaskCreate(vTask2, "Task 2", 128, ( void * )&huart2, 2,  &xHandle_task2);
-   if (xReturned == 0)
-   {
- 	  Error_Handler();
-   }
+  if (xReturned == 0)
+  {
+ 	Error_Handler();
+  }
 
+  xReturned = xTaskCreate(vTask3, "Task 3", 128, ( void * )&huart2, 3,  &xHandle_task3);
+  if (xReturned == 0)
+  {
+  	Error_Handler();
+  }
 
   /* Start scheduler */
    vTaskStartScheduler();
