@@ -124,6 +124,28 @@ void SysTick_Handler(void)
 /* please refer to the startup file (startup_stm32f0xx.s).                    */
 /******************************************************************************/
 
-/* USER CODE BEGIN 1 */
-
-/* USER CODE END 1 */
+/**
+  * @brief This function handles USART1 global interrupt.
+//  */
+//void USART2_IRQHandler(void)
+//{
+//  /* USER CODE BEGIN USART1_IRQn 0 */
+//  /* Check RXNE flag value in ISR register */
+// // if (LL_USART_IsActiveFlag_RXNE(USART2) && LL_USART_IsEnabledIT_RXNE(USART2))
+//  //{
+//    /* RXNE flag will be cleared by reading of RDR register (done in call) */
+//    /* Call function in charge of handling Character reception */
+//    USART_CharReception_Callback();
+//  //}
+//  //else
+//  //{
+//    /* Call Error function */
+//   // Error_Callback();
+//
+//
+// // }
+//  /* USER CODE END USART1_IRQn 0 */
+//  /* USER CODE BEGIN USART1_IRQn 1 */
+//
+//  /* USER CODE END USART1_IRQn 1 */
+//}

@@ -43,7 +43,7 @@ TaskHandle_t xHandle_task1 = NULL;
 TaskHandle_t xHandle_task2 = NULL;
 
 
-
+uint8_t rx_buff[2];
 
 
 /* Private function prototypes -----------------------------------------------*/
@@ -72,12 +72,12 @@ int main(void)
 
   /* Create the thread(s) */
 
-  if(xTaskCreate(vTask1, "Task 1", 128, ( void * )&huart2, 0,  &xHandle_task1) == 0)
-  {
-	  Error_Handler();
-  }
+//  if(xTaskCreate(vTask1, "Task 1", 120, ( void * )&huart2, 0,  &xHandle_task1) == 0)
+//  {
+//	  Error_Handler();
+//  }
 
-  if(xTaskCreate(vTask2, "Task 2", 128, ( void * )&huart2, 0,  &xHandle_task2) == 0)
+  if(xTaskCreate(vTask2, "Task 2", 120, ( void * )&huart2, 0,  &xHandle_task2) == 0)
   {
  	Error_Handler();
   }
@@ -147,11 +147,18 @@ static void MX_USART2_UART_Init(void)
   huart2.Init.OverSampling = UART_OVERSAMPLING_16;
   huart2.Init.OneBitSampling = UART_ONE_BIT_SAMPLE_DISABLE;
   huart2.AdvancedInit.AdvFeatureInit = UART_ADVFEATURE_NO_INIT;
+
+
+  /* USART1 interrupt Init */
+  NVIC_SetPriority(USART2_IRQn, NVIC_EncodePriority(NVIC_GetPriorityGrouping(),0, 0));
+  NVIC_EnableIRQ(USART2_IRQn);
+
+
   if (HAL_UART_Init(&huart2) != HAL_OK)
   {
     Error_Handler();
   }
-
+  HAL_UART_Receive_IT(&huart2, rx_buff, 2);
 }
 
 /**
@@ -169,18 +176,10 @@ static void MX_GPIO_Init(void)
 	  __HAL_RCC_GPIOA_CLK_ENABLE();
 	  __HAL_RCC_GPIOB_CLK_ENABLE();
 
-	  /*Configure GPIO pin Output Level */
-	  HAL_GPIO_WritePin(GPIOA, GPIO_PIN_12, GPIO_PIN_RESET);
 
 	  /*Configure GPIO pin Output Level */
 	  HAL_GPIO_WritePin(GPIOB, GPIO_PIN_3, GPIO_PIN_RESET);
 
-	  /*Configure GPIO pin : PA12 */
-	  GPIO_InitStruct.Pin = GPIO_PIN_12;
-	  GPIO_InitStruct.Mode = GPIO_MODE_OUTPUT_PP;
-	  GPIO_InitStruct.Pull = GPIO_NOPULL;
-	  GPIO_InitStruct.Speed = GPIO_SPEED_FREQ_LOW;
-	  HAL_GPIO_Init(GPIOA, &GPIO_InitStruct);
 
 	  /*Configure GPIO pin : PB3 */
 	  GPIO_InitStruct.Pin = GPIO_PIN_3;
@@ -191,6 +190,50 @@ static void MX_GPIO_Init(void)
 }
 
 
+//void USART2_IRQHandler(void)
+//{
+//
+//
+//  /* Read Received character. RXNE flag is cleared by reading of RDR register */
+//  HAL_UART_Receive(&huart2,&rx_buff[0],1,0);
+//
+//
+//  /* Echo received character on TX */
+//  HAL_UART_Transmit(&huart2, rx_buff,1,10);
+//}
+void HAL_UART_RxCpltCallback(UART_HandleTypeDef *huart)
+{
+    HAL_UART_Transmit(&huart2, rx_buff, 2, 100);
+    HAL_UART_Receive_IT(&huart2, rx_buff, 2);
+}
+/**
+  * @brief  Function called in case of error detected in USART IT Handler
+  * @param  None
+  * @retval None
+  */
+void Error_Callback(void)
+{
+  //__IO uint32_t isr_reg;
+
+  /* Disable USARTx_IRQn */
+  //NVIC_DisableIRQ(USART2_IRQn);
+
+  /* Error handling example :
+    - Read USART ISR register to identify flag that leads to IT raising
+    - Perform corresponding error handling treatment according to flag
+  */
+//  isr_reg = LL_USART_ReadReg(USART2, ISR);
+//  if (isr_reg & LL_USART_ISR_NE)
+  {
+    /* case Noise Error flag is raised : ... */
+   // LED_Blinking(LED_BLINK_FAST);
+  }
+  //else
+  //{
+    /* Unexpected IT source : Set LED to Blinking mode to indicate error occurs */
+  //  LED_Blinking(LED_BLINK_ERROR);
+  //}
+}
 
 
 /**
