@@ -77,12 +77,10 @@ int main(void)
 	  Error_Handler();
   }
 
-  if(xTaskCreate(vTask2, "Task 2", 128, ( void * )&huart2, 2,  &xHandle_task2) == 0)
+  if(xTaskCreate(vTask2, "Task 2", 128, ( void * )&huart2, 0,  &xHandle_task2) == 0)
   {
  	Error_Handler();
   }
-
-
 
 
 

@@ -1,5 +1,6 @@
 #include "FreeRTOS.h"
 #include "task.h"
+#include "semphr.h"
 #include "stm32f0xx_hal.h"
 
 #include "m_functinos.h"
@@ -26,9 +27,11 @@ void vTask2( void * pvParameters )
 		{
 			case STATE_INIT:
 			{
-				Task2Ctrl.xStructQueue = xQueueCreate(5, sizeof( Task2Message ));
-				//vPrintString(huart, (unsigned char *)"task 2: STATE_INIT\n\r");
-				if(Task2Ctrl.xStructQueue != NULL)
+				Task2Ctrl.xStructQueue = xQueueCreate(10, sizeof( Task2Message ));
+
+				vSemaphoreCreateBinary(Task2Ctrl.xSemaphore);
+
+				if((Task2Ctrl.xStructQueue != NULL)&&(Task2Ctrl.xSemaphore != NULL))
 				{
 				  Task2Ctrl.state = STATE_RUNNING;
 				}
@@ -36,15 +39,27 @@ void vTask2( void * pvParameters )
 			}
 			case STATE_RUNNING:
 			{
+				 char buffer[15];
+
+				uint8_t count = uxQueueMessagesWaiting(Task2Ctrl.xStructQueue);
+				sprintf(buffer,"number of messages in queue %d\n\r", count);
+				vPrintString(Task2Ctrl.huart, (unsigned char *)buffer);
 
 				 if( xQueueReceive( Task2Ctrl.xStructQueue,&RxMessage,(TickType_t)10 ) == pdPASS )
 				 {
-					 char buffer[15];
 					 sprintf(buffer,"Msg rx ID %d\n\r", RxMessage.ucMessageID);
 					 vPrintString(Task2Ctrl.huart, (unsigned char *)buffer);
 				 }
 				//vPrintString(huart, (unsigned char *)"task 2: STATE_RUNNING\n\r");
 
+
+
+
+				 if( xSemaphoreTake( Task2Ctrl.xSemaphore, ( TickType_t ) 10 ) == pdTRUE )
+				 {
+
+
+				 }
 				break;
 			}
 		}
@@ -62,5 +77,9 @@ task2States getVTask2State(void)
 QueueHandle_t getVTask2Queue(void)
 {
 	return Task2Ctrl.xStructQueue;
+}
+SemaphoreHandle_t getVTask2Semaphore(void)
+{
+	return Task2Ctrl.xSemaphore;
 }
 

@@ -20,11 +20,11 @@ void vTask1( void * pvParameters )
 
 	for(;;)
 	{
-		vPrintString(huart, (unsigned char *)"I'm task 1\n\r");
-	    HAL_GPIO_WritePin(GPIOB, GPIO_PIN_3, GPIO_PIN_SET);
-		vTaskDelay(1000/ portTICK_PERIOD_MS); // Wait 1000 ms
-	    HAL_GPIO_WritePin(GPIOB, GPIO_PIN_3, GPIO_PIN_RESET);
-	    vTaskDelay(1000/ portTICK_PERIOD_MS); // Wait 1000 ms
+//		vPrintString(huart, (unsigned char *)"I'm task 1\n\r");
+//	    HAL_GPIO_WritePin(GPIOB, GPIO_PIN_3, GPIO_PIN_SET);
+//		vTaskDelay(100/ portTICK_PERIOD_MS); // Wait 1000 ms
+//	    HAL_GPIO_WritePin(GPIOB, GPIO_PIN_3, GPIO_PIN_RESET);
+//	    vTaskDelay(200/ portTICK_PERIOD_MS); // Wait 1000 ms
 
 
 	    Task2Message newData;
@@ -45,6 +45,8 @@ void vTask1( void * pvParameters )
 
 
 	    dataCount++;
+
+	    vTaskDelay(2000/ portTICK_PERIOD_MS); // Wait 1000 ms
 	}
 
 }
