@@ -1,4 +1,4 @@
-..\App\task2\task2.c:18:6:vTask2	7
-..\App\task2\task2.c:73:13:getVTask2State	1
-..\App\task2\task2.c:77:15:getVTask2Queue	1
-..\App\task2\task2.c:81:19:getVTask2Semaphore	1
+..\App\task2\task2.c:19:6:vTask2	8
+..\App\task2\task2.c:76:13:getVTask2State	1
+..\App\task2\task2.c:80:15:getVTask2Queue	1
+..\App\task2\task2.c:84:19:getVTask2Semaphore	1

@@ -4,9 +4,9 @@
 
 void vPrintString(UART_HandleTypeDef *huart, unsigned char * message)
 {
-//	vTaskSuspendAll();
+	vTaskSuspendAll();
 	HAL_UART_Transmit(huart, message, strlen((char*)message), 10);
-//	xTaskResumeAll();
+	xTaskResumeAll();
 }
 
 void vPrintStringandNumber(UART_HandleTypeDef *huart, unsigned char * message, int number)

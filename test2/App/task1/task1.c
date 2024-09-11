@@ -46,7 +46,7 @@ void vTask1( void * pvParameters )
 
 	    dataCount++;
 
-	    vTaskDelay(2000/ portTICK_PERIOD_MS); // Wait 1000 ms
+	    vTaskDelay(2000/ portTICK_PERIOD_MS); // Wait 2000 ms
 	}
 
 }

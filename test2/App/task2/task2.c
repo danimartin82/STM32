@@ -10,6 +10,7 @@
 
 Task2Control Task2Ctrl;
 Task2Message RxMessage;
+//char buffer[15];
 /**
   * @brief  Function implementing the vTask1 thread.
   * @param  argument: Not used
@@ -39,25 +40,27 @@ void vTask2( void * pvParameters )
 			}
 			case STATE_RUNNING:
 			{
-				 char buffer[15];
 
-				uint8_t count = uxQueueMessagesWaiting(Task2Ctrl.xStructQueue);
-				sprintf(buffer,"number of messages in queue %d\n\r", count);
-				vPrintString(Task2Ctrl.huart, (unsigned char *)buffer);
+				//uint8_t count = uxQueueMessagesWaiting(Task2Ctrl.xStructQueue);
+				//sprintf(buffer,"number of messages in queue %d\n\r", count);
+				//vPrintString(Task2Ctrl.huart, (unsigned char *)buffer);
 
-				 if( xQueueReceive( Task2Ctrl.xStructQueue,&RxMessage,(TickType_t)10 ) == pdPASS )
-				 {
-					 sprintf(buffer,"Msg rx ID %d\n\r", RxMessage.ucMessageID);
-					 vPrintString(Task2Ctrl.huart, (unsigned char *)buffer);
-				 }
-				//vPrintString(huart, (unsigned char *)"task 2: STATE_RUNNING\n\r");
-
-
-
-
+//				 if( xQueueReceive( Task2Ctrl.xStructQueue,&RxMessage,(TickType_t)10 ) == pdPASS )
+//				 {
+//					 sprintf(buffer,"Msg rx ID %d\n\r", RxMessage.ucMessageID);
+//					 vPrintString(Task2Ctrl.huart, (unsigned char *)buffer);
+//				 }
+//				//vPrintString(huart, (unsigned char *)"task 2: STATE_RUNNING\n\r");
+//
+//
+//
+//
 				 if( xSemaphoreTake( Task2Ctrl.xSemaphore, ( TickType_t ) 10 ) == pdTRUE )
 				 {
-
+					 if( xQueueReceive( Task2Ctrl.xStructQueue,&RxMessage,(TickType_t)10 ) == pdPASS )
+					 {
+					 				 vPrintString(Task2Ctrl.huart, (unsigned char *)"Msg RX\n\n");
+					 }
 
 				 }
 				break;
